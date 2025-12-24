@@ -16,7 +16,7 @@ void buzz();
 
 
 void setup() {
-  // put your setup code here, to run once:
+  
   lcd.init();
   lcd.backlight();
   
@@ -30,12 +30,11 @@ void setup() {
 
   delay(1000);
   dht.begin();
-
-  disarm();
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
   disarm();
   sensorRead();
   blink();
