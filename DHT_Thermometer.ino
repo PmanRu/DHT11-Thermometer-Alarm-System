@@ -7,6 +7,9 @@ DHT dht(dht_sensor, DHT11);
 
 LiquidCrystal_I2C lcd(0x27,16,2); 
 
+float tempf;
+float humidity;
+
 uint16_t indicator[2] = {2, 65535}; 
 
 void disarm();
@@ -14,9 +17,8 @@ void sensorRead();
 void blink();
 void buzz();
 
-
 void setup() {
-  
+
   lcd.init();
   lcd.backlight();
   
@@ -30,11 +32,12 @@ void setup() {
 
   delay(1000);
   dht.begin();
-  
+  delay(5000);
+
 }
 
 void loop() {
-  
+
   disarm();
   sensorRead();
   blink();
@@ -46,7 +49,7 @@ void loop() {
 
 void blink() {
 
-  if (dht.readTemperature(true) >= 80) {
+  if (tempf >= 80) {
     indicator[0]++;
   }
 
@@ -73,7 +76,7 @@ void buzz() {
 void disarm() {
 
   if (digitalRead(12)==HIGH) {
-    while (dht.readTemperature(true) >= 80) {
+    while (tempf >= 80) {
       digitalWrite(8, LOW);
       noTone(7);
       sensorRead();
@@ -84,23 +87,28 @@ void disarm() {
 }
 
 void sensorRead() {
+  
+  tempf = dht.readTemperature(true);
+  humidity = dht.readHumidity();
+
   lcd.setCursor(0,0);
   lcd.print("Humidity: ");
   lcd.setCursor(10,0);
-  lcd.print(dht.readHumidity());
+  lcd.print(humidity);
   lcd.setCursor(15,0);
   lcd.print("%");
 
   lcd.setCursor(0,1);
   lcd.print("Temp. : ");
   lcd.setCursor(8,1);
-  lcd.print(dht.readTemperature(true));
+  lcd.print(tempf);
   lcd.setCursor(13,1);
   lcd.print("F");
 
-  Serial.print(dht.readHumidity());
+  Serial.print(humidity);
   Serial.print("% ");
-  Serial.print(dht.readTemperature(true));
+  Serial.print(tempf);
   Serial.print("F ");
   Serial.println(indicator[0]);
+  
 }
