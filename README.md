@@ -6,5 +6,5 @@ Features:
 - 16x2 I2C LCD display output
 - Visual alarm using LED
 - Audible alarm using buzzer
-- Manual disarm button
+- Manual disarm button (hold the button down)
 - Serial monitor output for debugging
