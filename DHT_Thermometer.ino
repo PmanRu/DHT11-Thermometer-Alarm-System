@@ -10,7 +10,8 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 float tempf;
 float humidity;
 
-uint16_t indicator[2] = {2, 65535}; 
+uint8_t LED = 2;
+uint16_t buzzer = 65535; 
 
 void disarm();
 void sensorRead();
@@ -50,22 +51,22 @@ void loop() {
 void blink() {
 
   if (tempf >= 80) {
-    indicator[0]++;
+    LED++;
   }
 
   else {
-    indicator[0] = 2;
+    LED = 2;
   }
 
-  uint8_t ledIndicator = ((indicator[0] % 2) > 0) ? 1 : 0;
+  uint8_t ledIndicator = ((LED % 2) > 0) ? 1 : 0;
   digitalWrite(8, ledIndicator);
 
 }
 
 void buzz() {
 
-  if ((indicator[0] % 2) > 0) {
-    tone(7, indicator[1]);
+  if ((LED % 2) > 0) {
+    tone(7, buzzer);
   }
 
   else {
@@ -109,6 +110,6 @@ void sensorRead() {
   Serial.print("% ");
   Serial.print(tempf);
   Serial.print("F ");
-  Serial.println(indicator[0]);
+  Serial.println(LED);
   
 }
